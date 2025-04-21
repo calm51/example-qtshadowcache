@@ -9,11 +9,17 @@
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
-    // 四角圆角不同, 或许可以只创建非圆角阴影,然后通过gridlayout把阴影和内容widget重叠,阴影需要挖去四角.
-    auto result = QSDC::Qtshadowcache::create(nullptr, 0, 13, QColor(140, 140, 140), Qt::white);
-    QString save2 = QDir::current().absoluteFilePath("shadowcache.png");
+    QSDC::Request request;
+    request.parent = nullptr;
+    request.blur_radius = 13;
+    request.shadow_color = QColor(140, 140, 140);
+    request.background_color = Qt::white;
+
+    const QSDC::Result &result = QSDC::Qtshadowcache::create(request);
+    const QString &save2 = QDir::current().absoluteFilePath(result.name);
     result.pixmap.save(save2);
-    qDebug() << result.pixmap << result.width << result.margin;
+    qDebug() << result.pixmap << result.cached << result.name;
+
 
     // result.margin /= 2;
     // result.radius /= 2;
@@ -32,7 +38,8 @@ QWidget#widget{
     border-image: url(%1) %2 %2 %2 %2 stretch stretch;
 }
 )")
-                        .arg(save2, QString::number(qMax(result.margin, static_cast<quint16>(result.radius * 2)))
+                        .arg(save2, QString::number(result.margin)
+                             // .arg(save2, QString::number(qMax(result.margin, static_cast<quint16>(result.radius * 2)))
                              // QString::number(qMax(static_cast<quint16>(9), qMax(result.margin, static_cast<quint16>(result.radius * 2))))
                              ));
     qDebug() << w.styleSheet();
