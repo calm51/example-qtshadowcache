@@ -18,9 +18,9 @@ int main(int argc, char *argv[]) {
     request.background_color = Qt::white;
 
     const QSDC::Result &result = QSDC::Qtshadowcache::create(request);
-    const QString &save2 = QDir::current().absoluteFilePath(result.name);
-    result.pixmap.save(save2);
-    qDebug() << result.pixmap << result.cached << result.name;
+    // const QString &save2 = QDir::current().absoluteFilePath(result.name);
+    result.pixmap.save(result.save2);
+    qDebug() << result.pixmap << result.cached << result.save2;
 
 
     // result.margin /= 2;
@@ -40,7 +40,7 @@ QWidget#widget{
     border-image: url(%1) %2 %2 %2 %2 stretch stretch;
 }
 )")
-                        .arg(save2, QString::number(result.margin)
+                        .arg(result.save2, QString::number(result.margin)
                              // .arg(save2, QString::number(qMax(result.margin, static_cast<quint16>(result.radius * 2)))
                              // QString::number(qMax(static_cast<quint16>(9), qMax(result.margin, static_cast<quint16>(result.radius * 2))))
                              ));
